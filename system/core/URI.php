@@ -183,9 +183,11 @@ class CI_URI {
 		}
 
 		$uri = $_SERVER['REQUEST_URI'];
-		if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0)
+		//~ if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0)
+		if (strpos($uri, str_replace(EXT,'',$_SERVER['SCRIPT_NAME'])) === 0)	//VIC
 		{
-			$uri = substr($uri, strlen($_SERVER['SCRIPT_NAME']));
+			//~ $uri = substr($uri, strlen($_SERVER['SCRIPT_NAME']));
+			$uri = substr(str_replace(EXT,'',$uri), strlen(str_replace(EXT,'',$_SERVER['SCRIPT_NAME'])));	//VIC
 		}
 		elseif (strpos($uri, dirname($_SERVER['SCRIPT_NAME'])) === 0)
 		{
