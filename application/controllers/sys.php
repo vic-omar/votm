@@ -3,12 +3,16 @@
 class Sys extends CI_Controller {
 
 	/**
-	 * Developer : Vic Omar TM
-	 * @v_omar
-	 */
+	* Developer : Vic Omar TM
+	* @v_omar
+	*/
+
 	public function index()
 	{
-		$this->load->view('html/head.php');
+		$data['css'] = $this->vic->css();
+		$data['js'] = $this->vic->js();
+		$this->load->view('html/head.php',$data);
+		$this->load->view('html/menu.php');
 		$this->load->view('html/foot.php');
 	}
 }

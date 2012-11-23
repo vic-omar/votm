@@ -1,0 +1,18 @@
+* {
+	font-size: 12px;
+	margin: 2px 0 2px 0;
+	font-family: "Autour One", Arial !important;
+}
+
+@font-face {
+	font-family: 'Autour One';
+	src: url("../fonts/FingerPaint-Regular.ttf");
+}
+
+.enter {
+	clear:both;
+}
+
+.ui-menu {
+	width: 150px;
+}
