@@ -1,4 +1,4 @@
-<nav>
+<section class='barraMenu space'>
 <ul class="menus" style=''>
 	<li>
 		<a href="#"><span class="ui-icon ui-icon-home"></span>INICIO</a>
@@ -15,4 +15,7 @@
 		</ul>
 	</li>
 </ul>
-</nav>
+</section>
+<!--	Contenedor	-->
+<section class='space'>
+Fomularios

@@ -56,7 +56,7 @@ class Vic {
 
 	public function css()
 	{
-		$css = array('css/styles.css','theme/humanity/jquery-ui-1.9.1.custom.css');
+		$css = array('css/styles.css','theme/excite-bike/jquery-ui-1.9.1.custom.css');
 		return $css;
 	}
 
