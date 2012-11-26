@@ -18,6 +18,19 @@
 	clear:both;
 }
 
+.redon {
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border:1px solid #333;
+	padding:2px 5px 2px 5px;
+	margin:2px 2px 2px 2px;
+}
+
+.ancho {
+	width:800px;
+}
+
 /*	Barra de Menu	*/
 .ui-menu {
 	width: 150px;
