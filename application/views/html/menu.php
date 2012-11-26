@@ -7,10 +7,10 @@
 		<a href="../index/sys/carga/"><span class="ui-icon ui-icon-folder-open"></span>CARGAR ARCHIVO</a>
 	</li>
 	<li>
-		<a href="#"><span class="ui-icon ui-icon-clipboard"></span>REPORTES</a>
+		<a href="javascript:void(0)"><span class="ui-icon ui-icon-clipboard"></span>REPORTES</a>
 		<ul>
 			<li>
-				<a href="#"><span class="ui-icon ui-icon-clipboard"></span>INDICADORES</a>
+				<a href="../index/sys/indicador/"><span class="ui-icon ui-icon-clipboard"></span>INDICADORES</a>
 			</li>
 		</ul>
 	</li>

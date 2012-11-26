@@ -212,6 +212,148 @@ class Sys extends CI_Controller {
 		$this->modela->insertAlarma($valInsert);
 	}
 
+	public function indicador()
+	{
+		$data['css'] = $this->vic->css();
+		$data['js'] = $this->vic->js();
+		$data['title'] = "GENERAR REPORTE DE INDICADORES";
+		$this->load->view('html/head.php',$data);
+		$this->load->view('html/menu.php',$data);
+		$this->load->view('indicador/form.php');
+		$this->load->view('indicador/js.php');
+		$this->load->view('html/foot.php');
+	}
+
+
+	public function indicadorLista()
+	{
+		$row=$this->vic->datosEnviadosJS($this->input->post('cadena'));
+		$ini=$this->vic->dateFormat($row['desde']);		//	2012-09-10
+		$fin=$this->vic->dateFormat($row['hasta']);		//	2012-09-14
+		$formato='diario';
+
+		//	Crear rango de fechas
+		$rangoFecha = $this->vic->rangoDate($ini,$fin,0,$formato);
+
+		//	Query de Consultas
+		$data=$this->modela->indicador($ini,$fin);
+
+		if ($data->num_rows() > 0)
+		{
+			$cabecera_fecha=array('fecha' => array('votm' => $rangoFecha));
+
+			//	Union de Fechas con los Datos que existe en la Base de Datos
+			$union_fecha_datos=$this->modela->convertir_array_con_fechas($data,$cabecera_fecha);
+
+			//	Agregar las fechas en las otras filas que no existen en la Base de Datos
+			$array_fecha_datos=$this->agregar_fechas_a_datos($union_fecha_datos);
+			array_shift($array_fecha_datos);	//	Eliminar el Primer Array (Cabecera Fechas)
+
+			$head = $this->vista_cabecera_nombre($union_fecha_datos,'votm','ALARMAS','th');
+
+			$body = $this->vista_cuerpo($array_fecha_datos);
+
+			$datos['head'] = $head;
+			$datos['body'] = $body;
+			$this->load->view('indicador/lista.php',$datos);
+		}
+		else
+		{
+			$get=array('OK','500','ui-icon-circle-check','Alerta','No existe Datos para Generar el Reporte de Indicadores.');
+			echo $this->vic->msgBox($get);
+		}
+
+	}
+
+	public function agregar_fechas_a_datos($arrayFecha)
+	{
+
+		//	Formamos los datos apartir del Rango de Fechas
+		$clave=array_keys($arrayFecha['fecha']);	//	Sacamos los Clave Principales
+		//	Comenzamos del Segunto Item
+		foreach ($arrayFecha as $key => $val)
+		{
+			foreach ($val as $keySub => $valSub)
+			{
+				$vic=$this->vic->agregarFechas($arrayFecha['fecha']['votm'],$arrayFecha[$key][$keySub]);
+				if(!empty($vic))
+				{
+					$arrayFecha[$key][$keySub]=$vic;
+				}
+				else
+				{
+					ksort($arrayFecha[$key][$keySub]);
+				}
+			}
+		}
+		return $arrayFecha;
+	}
+
+	public function vista_cabecera_nombre($array_rango_fecha,$nombre_campo,$nombre_fila,$etiqueta)
+	{
+		if ($etiqueta=="td") {
+			$tag="td";
+		}
+		elseif ($etiqueta=="th") {
+			$tag="th";
+		}
+		else {
+			$tag="div";
+		}
+
+		$html="<".$tag.">".$nombre_fila."</".$tag.">";
+		foreach($array_rango_fecha['fecha'][$nombre_campo] as $dia => $val)
+		{
+			if($dia!='Totales')
+			{
+				$html.= "<".$tag.">".date("d/m",strtotime($dia))."</".$tag.">";
+			}
+			else
+			{
+				$html.= "<".$tag.">".$dia."</".$tag.">";
+			}
+		}
+
+		return $html;
+	}
+
+	public function vista_cuerpo($array_body)
+	{
+		$html="";
+		foreach($array_body as $keys => $vals)
+		{
+			$html .= "<tr><th class='ui-state-highlight'>".$keys."</th></tr>";
+			foreach ($vals as $keysSub => $valsSub )
+			{
+				if ($keysSub != 'Totales')
+				{
+					$html.="<tr><td>".$keysSub."</td>";
+					foreach($valsSub as $k => $v)
+					{
+						$html.="<td align='center'>".$v."</td>";
+					}
+					$html.="</tr>";
+				}
+			}
+		}
+		return $html;
+	}
+
+	public function vista_cuerpo_after($array_body)
+	{
+		$html="";
+		foreach($array_body as $keys => $vals)
+		{
+			$html.="<tr><td class='pintarName'>".$this->vic->name_Etiquetas($keys)."</td>";
+			foreach($vals as $k => $v)
+			{
+				$html.="<td align='center'>".$v."</td>";
+			}
+			$html.="</tr>";
+		}
+		return $html;
+	}
+
 }
 
 /* End of file Sys.php */

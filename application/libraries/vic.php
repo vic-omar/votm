@@ -31,7 +31,7 @@ class Vic {
 		{
 			$html.="<div class='enter'></div>"
 					."<div class='ui-state-error ui-corner-all' style='width:".$ancho."px;padding: 0 3px 0 3px;text-align: justify;margin:0 auto'><p>"
-					."<span class='ui-icon ".$icono." left'></span><strong>&nbsp;".$titulo."&nbsp;:&nbsp;</strong>"
+					."<span class='ui-icon ".$icono."' style='float:left'></span><strong>&nbsp;".$titulo."&nbsp;:&nbsp;</strong>"
 					."".$contenido.""
 					."</p></div>"
 				."<div class='enter'></div>";
@@ -40,7 +40,7 @@ class Vic {
 		{
 			$html.="<div class='enter'></div>"
 					."<div class='ui-state-highlight ui-corner-all' style='width:".$ancho."px;padding: 0 3px 0 3px;text-align: justify;margin:0 auto'><p>"
-					."<span class='ui-icon ".$icono." left'></span><strong>&nbsp;".$titulo."&nbsp;:&nbsp;</strong>"
+					."<span class='ui-icon ".$icono."' style='float:left'></span><strong>&nbsp;".$titulo."&nbsp;:&nbsp;</strong>"
 					."".$contenido.""
 					."</p></div>"
 					."<div class='enter'></div>";
@@ -58,6 +58,51 @@ class Vic {
 	{
 		$css = array('css/styles.css','theme/excite-bike/jquery-ui-1.9.1.custom.css');
 		return $css;
+	}
+
+	public function rangoDate($ini,$fin,$valor,$formato)
+	{
+		
+		$incremento=$ini;
+		$array=array($ini => $valor);
+		while($incremento < $fin)
+		{
+			if ($formato=='diario') 
+			{
+				$incremento=date("Y-m-d", strtotime($incremento. " + 1 day"));
+			}
+			else 
+			{
+				$incremento=date("Y-m", strtotime($incremento. " + 1 month"));
+			}
+			$array[$incremento]=$valor;
+		}
+		$array['Totales']=$valor;
+		return $array;
+	}
+
+	public function agregarFechas($arrGlobal=array(),$arrSeleccion=array())
+	{
+		//	Sacar las fechas que faltan
+		$arrFalta=array_diff_key($arrGlobal, $arrSeleccion);
+		//	Si no esta vacio
+		if(count($arrFalta)!=0)
+		{
+			//	Seleccionamos los Key(Fechas) para asignarle valores
+			$arrFecha=array_keys($arrFalta);
+			//	Llenamos Cero (0) a los Key (fecha que Faltan)
+			$arrLleno=array_fill_keys($arrFecha, '0');
+			//	Llenamos o Juntamos los Key (Fechas que Faltan) al Array de Seleccion
+			$arrSeleccionFinal = array_merge($arrSeleccion, $arrLleno);
+			//	Ordemoas los Key
+			ksort($arrSeleccionFinal);
+		}
+		else
+		{
+			//	Se encuentra vacio
+			$arrSeleccionFinal=array();
+		}
+		return $arrSeleccionFinal;
 	}
 
 }

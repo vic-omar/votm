@@ -34,5 +34,39 @@ function insertAlarma($val)
 	$this->db->query($sqlIA);
 }
 
+function indicador($ini,$fin) 
+{
+	$sql="SELECT IFNULL(al.alarma,'Totales') AS alarma, al.nombre, IFNULL(al.fecha,'Totales') AS fechas, al.cantidad FROM ( "
+			."SELECT a.AlarmSource AS alarma, IFNULL(a.Name,'Totales') AS nombre, STR_TO_DATE(LEFT(TRIM(a.GeneratedTime), 10),'%d/%m/%Y') AS fecha, "
+				."COUNT(STR_TO_DATE(LEFT(TRIM(a.GeneratedTime), 10),'%d/%m/%Y')) AS cantidad "
+			."FROM vicOmar a "
+			."WHERE STR_TO_DATE(LEFT(TRIM(a.GeneratedTime), 10),'%d/%m/%Y') BETWEEN '".$ini."' AND '".$fin."' "
+			."GROUP BY a.AlarmSource, a.Name, STR_TO_DATE(LEFT(TRIM(a.GeneratedTime), 10),'%d/%m/%Y') WITH ROLLUP "
+		.") al ";
+	$kry=$this->db->query($sql);
+	return $kry;
+}
+
+function convertir_array_con_fechas($filas,$fechas)
+{
+	//	Capturar las campos de la consulta
+	$campos=$filas->list_fields();
+	//	Agregamos el rango de fechas
+	$array=$fechas;
+	//	Creando el Array de las Filas
+	if($filas->num_rows()!=0)
+	{
+		foreach($filas->result_array() as $rows)
+		{
+			$array[$rows[$campos[0]]][$rows[$campos[1]]][$rows[$campos[2]]]=$rows[$campos[3]];
+		}
+	}
+	else
+	{
+		$array=array();
+	}
+	return $array;
+}
+
 }	// Fin clase
 ?>
