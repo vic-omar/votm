@@ -34,7 +34,7 @@ class Sys extends CI_Controller {
 
 	public function txtUpLoad()
 	{
-		//~ error_reporting(0);
+		error_reporting(0);
 		$uploaddir = '/var/www/votm/files/txt/';
 		$files = $this->input->post('text_file');
 		$valFile = $this->input->post('val');
@@ -247,6 +247,7 @@ class Sys extends CI_Controller {
 
 			//	Agregar las fechas en las otras filas que no existen en la Base de Datos
 			$array_fecha_datos=$this->agregar_fechas_a_datos($union_fecha_datos);
+
 			array_shift($array_fecha_datos);	//	Eliminar el Primer Array (Cabecera Fechas)
 
 			$head = $this->vista_cabecera_nombre($union_fecha_datos,'votm','ALARMAS','th');
@@ -255,6 +256,7 @@ class Sys extends CI_Controller {
 
 			$datos['head'] = $head;
 			$datos['body'] = $body;
+			$datos['rows'] = $array_fecha_datos;
 			$this->load->view('indicador/lista.php',$datos);
 		}
 		else
@@ -339,19 +341,41 @@ class Sys extends CI_Controller {
 		return $html;
 	}
 
-	public function vista_cuerpo_after($array_body)
+	public function detalleTotal()
 	{
-		$html="";
-		foreach($array_body as $keys => $vals)
+		$text = json_decode($this->input->post('texto'), true);
+		$html = "";
+
+		foreach($text as $key => $val)
 		{
-			$html.="<tr><td class='pintarName'>".$this->vic->name_Etiquetas($keys)."</td>";
-			foreach($vals as $k => $v)
+			foreach ($val as $keySub => $valSub)
 			{
-				$html.="<td align='center'>".$v."</td>";
+				if ($keySub == 'Totales')
+				{
+					$total[$key] = $valSub['Totales'];
+				}
 			}
-			$html.="</tr>";
 		}
-		return $html;
+		array_multisort($total, SORT_DESC);		//	Odenar el Numero Mayor
+		array_shift($total);	//	Eliminar el Primer Datos
+
+		$html .= "<div class='space ui-state-error' style='width:400px;text-align:center'>ALARMAS</div><div class='space'>&nbsp;</div>"
+				."<div class='space ui-state-error' style='width:100px;text-align:center'>TOTAL</div>"
+				."<div class='enter'></div>";
+		$i=1;
+		foreach ($total as $keyT => $valT)
+		{
+			if ($i > 10)
+			{
+				break;
+			}
+			$html .= "<div class='space ui-state-highlight' style='width:400px'>&nbsp;".$keyT."</div>"
+					."<div class='space'>&nbsp;</div>"
+					."<div class='space ui-state-highlight' style='width:100px;text-align:center'>".$valT."</div>"
+					."<div class='enter'></div>";
+			$i++;
+		}
+		echo $html;
 	}
 
 }

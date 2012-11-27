@@ -17,3 +17,6 @@
 	<div class="resultadoLoad"></div>
 
 </form>
+
+<!--	Popup	-->
+<div class="popupAlarma" title="Detalle de Alarma">asdsd</div>

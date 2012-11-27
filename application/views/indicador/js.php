@@ -41,17 +41,20 @@ $(document).ready(function(){
 
 	});
 
+//	Popup Configuracion
+	$(".popupAlarma").dialog({
+		modal: true,
+		autoOpen: false,
+		show: "slide",
+		hide: "drop",
+		width: 700,
+		height: 450,
+		buttons: {
+			Ok: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+
 });
 </script>
-<!--
-<script type="text/javascript" src="js/jquery.cookie.pack.js"></script>
-<script type="text/javascript" src="js/jquery.dimensions.min.js"></script>
-<script type="text/javascript" src="js/jquery.scrollableFixedHeaderTable.js"></script>
-
-<style type="text/css">
-.ui-datepicker
-{
-	z-index: 1003 !important;
-}
-</style>
--->

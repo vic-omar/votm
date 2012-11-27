@@ -34,7 +34,7 @@ function insertAlarma($val)
 	$this->db->query($sqlIA);
 }
 
-function indicador($ini,$fin) 
+function indicador($ini,$fin)
 {
 	$sql="SELECT IFNULL(al.alarma,'Totales') AS alarma, al.nombre, IFNULL(al.fecha,'Totales') AS fechas, al.cantidad FROM ( "
 			."SELECT a.AlarmSource AS alarma, IFNULL(a.Name,'Totales') AS nombre, STR_TO_DATE(LEFT(TRIM(a.GeneratedTime), 10),'%d/%m/%Y') AS fecha, "
