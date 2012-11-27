@@ -378,6 +378,46 @@ class Sys extends CI_Controller {
 		echo $html;
 	}
 
+	public function criticidad()
+	{
+		$cssLoad = $this->vic->css();
+		//~ array_push($cssLoad, 'css/visualize.css', 'css/visualize-light.css');
+		$data['css'] = $cssLoad;
+
+		$jsLoad = $this->vic->js();
+		//~ array_push($jsLoad, 'js/excanvas.js', 'js/visualize.jQuery.js');
+		$data['js'] = $jsLoad;
+
+		$data['title'] = "REPORTE DE CRITICIDAD";
+		$this->load->view('html/head.php',$data);
+		$this->load->view('html/menu.php',$data);
+		$this->load->view('criticidad/form.php');
+		$this->load->view('criticidad/js.php');
+		$this->load->view('html/foot.php');
+	}
+
+	public function criticidadReport()
+	{
+		$row=$this->vic->datosEnviadosJS($this->input->post('cadena'));
+		$ini=$this->vic->dateFormat($row['desde']);
+		$fin=$this->vic->dateFormat($row['hasta']);
+
+		//	Sentencia Reporte
+		$data = $this->modela->criticidad($ini,$fin);
+		if ($data->num_rows() > 0) 
+		{
+			$datos['rows'] = $data;
+			$this->load->view('criticidad/lista.php',$datos);
+		}
+		else 
+		{
+			$get=array('OK','500','ui-icon-circle-check','Alerta','No existe Datos para Generar el Reporte de Criticidad.');
+			echo $this->vic->msgBox($get);
+		}
+		
+	}
+	
+
 }
 
 /* End of file Sys.php */

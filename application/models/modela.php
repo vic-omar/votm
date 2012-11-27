@@ -68,5 +68,21 @@ function convertir_array_con_fechas($filas,$fechas)
 	return $array;
 }
 
+function criticidad($ini,$fin)
+{
+	$sql="SELECT IFNULL(a.funcion,'Totales') AS funcion, a.critical, a.major, a.warning, a.total FROM ( "
+			."SELECT trim(a.FunctionType) as funcion "
+				.",SUM(IF(trim(a.Severity) = 'Critical',1,0)) AS 'Critical' "
+				.",SUM(IF(trim(a.Severity) = 'Major',1,0)) AS 'Major' "
+				.",SUM(IF(trim(a.Severity) = 'Warning',1,0)) AS 'Warning' "
+				.",COUNT(*) AS Total "
+			."FROM vicOmar a "
+			."WHERE STR_TO_DATE(LEFT(TRIM(a.GeneratedTime), 10),'%d/%m/%Y') BETWEEN '".$ini."' AND '".$fin."' "
+			."GROUP BY trim(a.FunctionType) WITH ROLLUP "
+		.") a ";
+	$kry=$this->db->query($sql);
+	return $kry;
+}
+
 }	// Fin clase
 ?>

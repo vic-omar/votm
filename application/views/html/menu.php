@@ -10,7 +10,10 @@
 		<a href="javascript:void(0)"><span class="ui-icon ui-icon-clipboard"></span>REPORTES</a>
 		<ul>
 			<li>
-				<a href="../index/sys/indicador/"><span class="ui-icon ui-icon-clipboard"></span>INDICADORES</a>
+				<a href="../index/sys/indicador/"><span class="ui-icon ui-icon-image"></span>INDICADORES</a>
+			</li>
+			<li>
+				<a href="../index/sys/criticidad/"><span class="ui-icon ui-icon-note"></span>CRITICIDAD</a>
 			</li>
 		</ul>
 	</li>
